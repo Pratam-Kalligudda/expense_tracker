@@ -166,6 +166,74 @@ class _NewExpenseState extends State<NewExpense> {
                   else
                     Row(
                       children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _amountController,
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              prefixText: '\$ ',
+                              label: Text("amount"),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 16,
+                        ),
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              _selectedDate == null
+                                  ? const Text("Selected Date")
+                                  : Text(formatter.format(_selectedDate!)),
+                              IconButton(
+                                  onPressed: showDate,
+                                  icon: const Icon(Icons.calendar_month))
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  if (maxwidth >= 600)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text("Cancel"),
+                        ),
+                        ElevatedButton(
+                          onPressed: _submitExpenseData,
+                          child: const Text("Submit"),
+                        )
+                      ],
+                    )
+                  else
+                    Row(
+                      children: [
+                        DropdownButton(
+                            value: _onCategoryChanged,
+                            items: Category.values
+                                .map(
+                                  (category) => DropdownMenuItem(
+                                    value: category,
+                                    child: Text(
+                                      category.name.toUpperCase(),
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                            onChanged: (value) {
+                              if (value == null) {
+                                return;
+                              }
+                              setState(() {
+                                _onCategoryChanged = value;
+                              });
+                            }),
                         const Spacer(),
                         TextButton(
                           onPressed: () {
@@ -179,72 +247,6 @@ class _NewExpenseState extends State<NewExpense> {
                         )
                       ],
                     ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _amountController,
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            prefixText: '\$ ',
-                            label: Text("amount"),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 16,
-                      ),
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            _selectedDate == null
-                                ? const Text("Selected Date")
-                                : Text(formatter.format(_selectedDate!)),
-                            IconButton(
-                                onPressed: showDate,
-                                icon: const Icon(Icons.calendar_month))
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      DropdownButton(
-                          value: _onCategoryChanged,
-                          items: Category.values
-                              .map(
-                                (category) => DropdownMenuItem(
-                                  value: category,
-                                  child: Text(
-                                    category.name.toUpperCase(),
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                          onChanged: (value) {
-                            if (value == null) {
-                              return;
-                            }
-                            setState(() {
-                              _onCategoryChanged = value;
-                            });
-                          }),
-                      const Spacer(),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text("Cancel"),
-                      ),
-                      ElevatedButton(
-                        onPressed: _submitExpenseData,
-                        child: const Text("Submit"),
-                      )
-                    ],
-                  ),
                 ],
               ),
             ),
